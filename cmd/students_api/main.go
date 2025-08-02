@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -10,12 +10,12 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
 	"github.com/rupak26/RESTapis_in_GOlang/internal/config"
+	"github.com/rupak26/RESTapis_in_GOlang/internal/http/handlers/students"
 )
 
-func getMethod(w http.ResponseWriter , r *http.Request) {
-	fmt.Fprintln(w , "Welcome to student apis")
-}
+
 
 func main() {
 	// load config 
@@ -25,7 +25,7 @@ func main() {
 
 	// setup router 
     router := http.NewServeMux() 
-	router.HandleFunc("/" , getMethod) 
+	router.HandleFunc("/api/students" , students.New()) 
 	
 	// setup server 
 	server := http.Server{
