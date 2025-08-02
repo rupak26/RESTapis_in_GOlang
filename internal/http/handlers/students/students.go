@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
+
 	"github.com/go-playground/validator/v10"
+	"github.com/rupak26/RESTapis_in_GOlang/internal/storage"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/types"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/utils/responses"
 )
 
-func New() http.HandlerFunc {
+func New(storage storage.Storage) http.HandlerFunc {
 	return func (w http.ResponseWriter , r *http.Request) {
 	   if r.Method == "GET" {	
 	      w.Write([]byte ("Welcome to student apis"))

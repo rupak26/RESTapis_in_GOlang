@@ -13,7 +13,7 @@ import (
 
 	"github.com/rupak26/RESTapis_in_GOlang/internal/config"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/http/handlers/students"
-	"github.com/rupak26/RESTapis_in_GOlang/internal/storage"
+	// "github.com/rupak26/RESTapis_in_GOlang/internal/storage"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/storage/sqlite"
 )
 
@@ -32,7 +32,7 @@ func main() {
 	slog.Info("Storage initialize" , slog.String("env" , cfg.Env) , slog.String("version" , "1.0.0"))
 	// setup router 
     router := http.NewServeMux() 
-	router.HandleFunc("/api/students" , students.New()) 
+	router.HandleFunc("/api/students" , students.New(storage)) 
 	
 	// setup server 
 	server := http.Server{
@@ -60,7 +60,7 @@ func main() {
 	ctx , cancle := context.WithTimeout(context.Background() , 5 * time.Second) 
 	defer cancle() 
 
-	err := server.Shutdown(ctx) 
+	err = server.Shutdown(ctx) 
 
 	if err != nil {
 		slog.Error("Failed to shut down server" , slog.String("error" , err.Error()))
