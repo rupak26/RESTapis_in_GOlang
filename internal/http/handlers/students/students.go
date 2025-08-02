@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/types"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/utils/responses"

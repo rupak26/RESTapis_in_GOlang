@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	//"fmt"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -13,6 +13,8 @@ import (
 
 	"github.com/rupak26/RESTapis_in_GOlang/internal/config"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/http/handlers/students"
+	"github.com/rupak26/RESTapis_in_GOlang/internal/storage"
+	"github.com/rupak26/RESTapis_in_GOlang/internal/storage/sqlite"
 )
 
 
@@ -21,8 +23,13 @@ func main() {
 	// load config 
 	cfg := config.MustLoad() 
 	// database setup
+    storage,err := sqlite.New(*cfg)
+	fmt.Print(storage)
+    if err != nil {
+		log.Fatal(err)
+	}
 
-
+	slog.Info("Storage initialize" , slog.String("env" , cfg.Env) , slog.String("version" , "1.0.0"))
 	// setup router 
     router := http.NewServeMux() 
 	router.HandleFunc("/api/students" , students.New()) 
