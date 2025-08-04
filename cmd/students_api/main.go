@@ -33,6 +33,7 @@ func main() {
 	// setup router 
     router := http.NewServeMux() 
 	router.HandleFunc("/api/students" , students.New(storage)) 
+	router.HandleFunc("/api/studentd/{id}" , students.GetByID(storage))
 	
 	// setup server 
 	server := http.Server{
@@ -59,7 +60,6 @@ func main() {
 
 	ctx , cancle := context.WithTimeout(context.Background() , 5 * time.Second) 
 	defer cancle() 
-
 	err = server.Shutdown(ctx) 
 
 	if err != nil {
