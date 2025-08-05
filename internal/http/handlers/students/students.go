@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/rupak26/RESTapis_in_GOlang/internal/storage"
@@ -75,11 +76,21 @@ func GetByID(storage storage.Storage) http.HandlerFunc {
 			return 
 		}
 		student , e := storage.GetStudentById(intId)
+
+		var ErrNotFound = errors.New("record not found")
 		
 		if e != nil {
-			slog.Error("error getting user" , slog.String("id" , id))
-            responses.WriteJson(w , http.StatusInternalServerError , responses.GeneralError(err))
-			return 
+			slog.Error("error getting student",slog.String("id", id),slog.String("error", e.Error()))
+
+            // Handle "not found" cleanly
+            if errors.Is(e, ErrNotFound) {
+                http.Error(w, "Student not found", http.StatusNotFound)
+                return
+            }
+
+            // All other errors
+            responses.WriteJson(w, http.StatusInternalServerError, responses.GeneralError(e))
+            return
 		}
 		responses.WriteJson(w , http.StatusOK , student)
 	}
