@@ -104,3 +104,42 @@ func GetByID(storage storage.Storage) http.HandlerFunc {
 		responses.WriteJson(w , http.StatusOK , student)
 	}
 }
+
+
+func UpdateByID(storage storage.Storage) http.HandlerFunc {
+	return func (w http.ResponseWriter , r *http.Request) {
+		if r.Method != "UPDATE" {	
+	      w.Write([]byte ("Method did not Match"))
+		  return 
+	    }
+
+		id := r.PathValue("id")
+		
+		slog.Info("Getting a Student" , slog.String("id" , id))
+
+		intId , err := strconv.ParseInt(id , 10 , 64)
+		
+		if err != nil {
+			responses.WriteJson(w , http.StatusBadRequest , responses.GeneralError(err))
+			return 
+		}
+		student , e := storage.UpdateStudentById(intId)
+
+		var ErrNotFound = errors.New("record not found")
+		
+		if e != nil {
+			slog.Error("error getting student",slog.String("id", id),slog.String("error", e.Error()))
+
+            // Handle "not found" cleanly
+            if errors.Is(e, ErrNotFound) {
+                http.Error(w, "Student not found", http.StatusNotFound)
+                return
+            }
+
+            // All other errors
+            responses.WriteJson(w, http.StatusInternalServerError, responses.GeneralError(e))
+            return
+		}
+		responses.WriteJson(w , http.StatusOK , student)
+	}
+}

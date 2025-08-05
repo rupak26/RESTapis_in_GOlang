@@ -111,3 +111,24 @@ func (s *Sqlite) GetStudentList() ([]types.Student , error) {
 
     return students , nil 
 } 
+
+
+func (s *Sqlite) UpdateStudentById(id int64) (types.Student , error) {
+
+	stmt , err := s.Db.Prepare("UPDATE students SET name = ?, email = ?, age = ? WHERE id = ? LIMIT 1")
+    
+	if err != nil {
+		return types.Student{} , err 
+	}
+
+	defer stmt.Close()
+	var student types.Student
+	
+	res , err := stmt.Exec(student.Id , student.Name , student.Email , student.Age)
+    fmt.Println(res)
+	if err != nil {
+		return types.Student{} , fmt.Errorf("query error: %w" , err)
+	}
+
+    return student , nil 
+} 
