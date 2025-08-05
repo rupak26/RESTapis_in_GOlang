@@ -17,7 +17,16 @@ import (
 func New(storage storage.Storage) http.HandlerFunc {
 	return func (w http.ResponseWriter , r *http.Request) {
 	   if r.Method == "GET" {	
-	      w.Write([]byte ("Welcome to student apis"))
+	      slog.Info("Getting list of all students") 
+
+		  students , err := storage.GetStudentList() 
+
+		  if err != nil {
+			responses.WriteJson(w , http.StatusInternalServerError , err) 
+			return 
+		  }
+
+		  responses.WriteJson(w , http.StatusOK , students)
 	   }
 	   if r.Method == "POST" {
 		  slog.Info("Creating Student") 
