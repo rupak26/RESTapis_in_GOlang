@@ -32,9 +32,10 @@ func main() {
 	slog.Info("Storage initialize" , slog.String("env" , cfg.Env) , slog.String("version" , "1.0.0"))
 	// setup router 
     router := http.NewServeMux() 
-	router.HandleFunc("/api/students" , students.New(storage)) 
-	router.HandleFunc("/api/studentd/{id}" , students.GetByID(storage))
 	
+	router.HandleFunc("/api/students" , students.New(storage)) 
+	router.HandleFunc("/api/students/{id}" , students.GetByID(storage))
+
 	// setup server 
 	server := http.Server{
 		Addr : cfg.Addr ,

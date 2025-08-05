@@ -69,7 +69,7 @@ func GetByID(storage storage.Storage) http.HandlerFunc {
 		slog.Info("Getting a Student" , slog.String("id" , id))
 
 		intId , err := strconv.ParseInt(id , 10 , 64)
-
+		
 		if err != nil {
 			responses.WriteJson(w , http.StatusBadRequest , responses.GeneralError(err))
 			return 
